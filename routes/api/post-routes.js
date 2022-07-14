@@ -83,7 +83,7 @@ router.get('/', (req, res) => {
   });
   
   router.delete('/:id', (req, res) => {
-    Post.delete({
+    Post.destroy({
       where: {
         id: req.params.id
       }
