@@ -1,11 +1,19 @@
 const router = require('express').Router();
-const { Post, User } = require('..');
+const { Post, User, Comment } = require('../../models');
 
 router.get('/', (req, res) => {
     Post.findAll({
       attributes: ['id', 'post_url', 'title', 'created_at'],
       order: [['created_at', 'DESC']],
       include: [
+        {
+          model: Comment,
+          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
+          include: {
+            model: User,
+            attributes: ['username']
+          }
+        },
         {
           model: User,
           attributes: ['username']
@@ -83,6 +91,7 @@ router.get('/', (req, res) => {
   });
   
   router.delete('/:id', (req, res) => {
+    console.log('id', req.params.id);
     Post.destroy({
       where: {
         id: req.params.id
